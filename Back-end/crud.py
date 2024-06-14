@@ -1,8 +1,5 @@
 from sqlalchemy.orm import Session
-
-
-import models
- 
+import models 
 from schemas import TodoSchemas
 
 def getAllTasks(db: Session, skip: int = 0, limit: int = 100):
@@ -18,11 +15,10 @@ def createNewTask(todo:TodoSchemas.TodoListBase,db: Session):
 def updateTask(db:Session, idToUpdate:int):
     todo = db.query(models.TodoList).filter_by(id=idToUpdate).first()
     if todo:
-         todo.is_complete = True
-         db.commit()
-         db.refresh(todo)
-         print(f"Todo item with id {idToUpdate} marked as complete.")
-         return True
+        todo.is_complete= not todo.is_complete
+        db.commit()
+        db.refresh(todo)
+        return True
     else:
         print(f"No todo item found with id {idToUpdate}.")
         return False
